@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snakes and Ladders</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1 class="page-header__title">Snakes and Ladders</h1>
+  </header>
+
+  <main class="main-layout">
+    <section class="board-section" aria-labelledby="board-title">
+      <h2 id="board-title" class="section-title">Board</h2>
+      <div id="game-board" class="game-board" role="grid" aria-label="Snakes and Ladders Board"></div>
+      <div class="board-legend">
+        <span class="legend-item legend-item--ladder">Ladder</span>
+        <span class="legend-item legend-item--snake">Snake</span>
+      </div>
+    </section>
+
+    <aside class="controls-section" aria-labelledby="controls-title">
+      <h2 id="controls-title" class="section-title">Controls</h2>
+
+      <section class="players-panel" aria-labelledby="players-title">
+        <h3 id="players-title" class="panel-title">Players</h3>
+        <ul id="players-list" class="players-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="dice-panel" aria-labelledby="dice-title">
+        <h3 id="dice-title" class="panel-title">Dice</h3>
+        <button id="roll-button" type="button" class="dice-button" aria-label="Roll dice">
+          <span class="dice-button__face">?</span>
+        </button>
+        <p class="dice-result" aria-live="polite">Roll to start</p>
+      </section>
+
+      <section class="turn-panel" aria-labelledby="turn-title">
+        <h3 id="turn-title" class="panel-title">Turn</h3>
+        <p id="turn-indicator" class="turn-indicator" aria-live="polite">Player 1's turn</p>
+      </section>
+
+      <section class="log-panel" aria-labelledby="log-title">
+        <h3 id="log-title" class="panel-title">Game Log</h3>
+        <div id="game-log" class="game-log" aria-live="polite" aria-label="Game events log"></div>
+      </section>
+    </aside>
+  </main>
+
+  <div id="aria-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
