@@ -37,10 +37,6 @@ export class UIController {
       cell.setAttribute('role', 'gridcell');
       cell.setAttribute('aria-label', `Cell ${cellNumber}`);
       
-      if (Math.floor((cellNumber - 1) / 10) % 2 === 1) {
-        cell.classList.add('board-cell--alt');
-      }
-      
       const cellType = this.game.board.getType(cellNumber);
       if (cellType === 'ladder') {
         cell.classList.add('board-cell--ladder');
@@ -55,9 +51,9 @@ export class UIController {
       const labelSpan = document.createElement('span');
       labelSpan.className = 'board-cell__label';
       if (cellType === 'ladder') {
-        labelSpan.textContent = '↑';
+        labelSpan.textContent = '🪜';
       } else if (cellType === 'snake') {
-        labelSpan.textContent = '↓';
+        labelSpan.textContent = '🐍';
       }
       
       const tokensDiv = document.createElement('div');
@@ -100,14 +96,12 @@ export class UIController {
   }
 
   renderTokens() {
-    // Clear existing tokens
     const allTokensDivs = this.boardElement.querySelectorAll('.board-tokens');
     for (let i = 0; i < allTokensDivs.length; i++) {
       allTokensDivs[i].innerHTML = '';
     }
     this.tokenElements.clear();
     
-    // Create tokens for each player
     for (let i = 0; i < this.game.players.length; i++) {
       const player = this.game.players[i];
       const token = document.createElement('div');
@@ -125,14 +119,16 @@ export class UIController {
   }
 
   updateTokens() {
-    // Move tokens to new positions
     for (let i = 0; i < this.game.players.length; i++) {
       const player = this.game.players[i];
       const token = this.tokenElements.get(player);
       if (token) {
         const cellNumber = player.position === 0 ? 1 : player.position;
         const tokensDiv = this.boardElement.querySelector(`.board-tokens[data-cell="${cellNumber}"]`);
-        if (tokensDiv && !tokensDiv.contains(token)) {
+        if (tokensDiv) {
+          if (tokensDiv.contains(token)) {
+            tokensDiv.removeChild(token);
+          }
           tokensDiv.appendChild(token);
         }
       }
@@ -161,9 +157,9 @@ export class UIController {
         
         let message = `${result.player.name} rolled ${result.roll}`;
         if (result.applied === 'ladder') {
-          message += ` and climbed a ladder to ${result.finalPosition}!`;
+          message += ` and climbed a 🪜 to ${result.finalPosition}!`;
         } else if (result.applied === 'snake') {
-          message += ` and slid down a snake to ${result.finalPosition}!`;
+          message += ` and slid down a 🐍 to ${result.finalPosition}!`;
         } else {
           message += ` and moved to ${result.finalPosition}`;
         }
@@ -203,7 +199,7 @@ export class UIController {
 
   updateTurnIndicator() {
     if (this.game.isGameOver && this.game.winner) {
-      this.turnIndicator.textContent = `${this.game.winner.name} Wins!`;
+      this.turnIndicator.textContent = `🎉 ${this.game.winner.name} Wins! 🎉`;
     } else {
       const currentPlayer = this.game.getCurrentPlayer();
       if (currentPlayer) {
@@ -225,8 +221,7 @@ export class UIController {
     entry.textContent = message;
     this.gameLog.prepend(entry);
     
-    // Keep only last 10 entries
-    while (this.gameLog.children.length > 10) {
+    while (this.gameLog.children.length > 12) {
       this.gameLog.removeChild(this.gameLog.lastChild);
     }
   }
