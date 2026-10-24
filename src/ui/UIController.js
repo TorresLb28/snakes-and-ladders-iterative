@@ -9,6 +9,9 @@ export class UIController {
     this.playersList = document.getElementById('players-list');
     this.gameLog = document.getElementById('game-log');
     this.ariaLiveRegion = document.getElementById('aria-live-region');
+    this.themeSelect = document.getElementById('theme-select');
+    this.ladderLabel = document.getElementById('ladder-label');
+    this.snakeLabel = document.getElementById('snake-label');
     this.tokenElements = new Map();
   }
 
@@ -24,6 +27,44 @@ export class UIController {
     this.rollButton.addEventListener('click', () => {
       this.handleRollClick();
     });
+
+    if (this.themeSelect) {
+      this.themeSelect.addEventListener('change', (event) => {
+        this.handleThemeChange(event.target.value);
+      });
+    }
+  }
+
+  handleThemeChange(theme) {
+    document.body.setAttribute('data-theme', theme);
+    this.updateThemeLabels(theme);
+    this.logEvent(`Theme changed to ${theme === 'jungle' ? 'Jungle/Selva' : theme === 'cyberpunk' ? 'Space Cyberpunk' : 'Classic'}`);
+    this.announce(`Theme changed to ${theme === 'jungle' ? 'Jungle or Selva' : theme === 'cyberpunk' ? 'Space Cyberpunk' : 'Classic'}`);
+  }
+
+  updateThemeLabels(theme) {
+    if (theme === 'jungle') {
+      if (this.ladderLabel) {
+        this.ladderLabel.textContent = 'Vine';
+      }
+      if (this.snakeLabel) {
+        this.snakeLabel.textContent = 'Snake';
+      }
+    } else if (theme === 'cyberpunk') {
+      if (this.ladderLabel) {
+        this.ladderLabel.textContent = 'Portal';
+      }
+      if (this.snakeLabel) {
+        this.snakeLabel.textContent = 'Black Hole';
+      }
+    } else {
+      if (this.ladderLabel) {
+        this.ladderLabel.textContent = 'Ladder';
+      }
+      if (this.snakeLabel) {
+        this.snakeLabel.textContent = 'Snake';
+      }
+    }
   }
 
   renderBoard() {
@@ -51,9 +92,23 @@ export class UIController {
       const labelSpan = document.createElement('span');
       labelSpan.className = 'board-cell__label';
       if (cellType === 'ladder') {
-        labelSpan.textContent = '🪜';
+        const currentTheme = document.body.getAttribute('data-theme') || 'classic';
+        if (currentTheme === 'jungle') {
+          labelSpan.textContent = '🌿';
+        } else if (currentTheme === 'cyberpunk') {
+          labelSpan.textContent = '⚡';
+        } else {
+          labelSpan.textContent = '🪜';
+        }
       } else if (cellType === 'snake') {
-        labelSpan.textContent = '🐍';
+        const currentTheme = document.body.getAttribute('data-theme') || 'classic';
+        if (currentTheme === 'jungle') {
+          labelSpan.textContent = '🐍';
+        } else if (currentTheme === 'cyberpunk') {
+          labelSpan.textContent = '🕳️';
+        } else {
+          labelSpan.textContent = '🐍';
+        }
       }
       
       const tokensDiv = document.createElement('div');
@@ -155,11 +210,24 @@ export class UIController {
         this.diceFace.textContent = result.roll;
         this.diceResult.textContent = `Rolled ${result.roll}`;
         
+        const currentTheme = document.body.getAttribute('data-theme') || 'classic';
         let message = `${result.player.name} rolled ${result.roll}`;
         if (result.applied === 'ladder') {
-          message += ` and climbed a 🪜 to ${result.finalPosition}!`;
+          if (currentTheme === 'jungle') {
+            message += ` and climbed a vine to ${result.finalPosition}!`;
+          } else if (currentTheme === 'cyberpunk') {
+            message += ` and used a portal to ${result.finalPosition}!`;
+          } else {
+            message += ` and climbed a ladder to ${result.finalPosition}!`;
+          }
         } else if (result.applied === 'snake') {
-          message += ` and slid down a 🐍 to ${result.finalPosition}!`;
+          if (currentTheme === 'jungle') {
+            message += ` and slid down a snake to ${result.finalPosition}!`;
+          } else if (currentTheme === 'cyberpunk') {
+            message += ` and fell into a black hole to ${result.finalPosition}!`;
+          } else {
+            message += ` and slid down a snake to ${result.finalPosition}!`;
+          }
         } else {
           message += ` and moved to ${result.finalPosition}`;
         }

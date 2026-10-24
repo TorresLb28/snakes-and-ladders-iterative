@@ -6,9 +6,17 @@
   <title>Snakes and Ladders</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="classic">
   <header class="page-header">
     <h1 class="page-header__title">Snakes and Ladders</h1>
+    <div class="theme-selector">
+      <label for="theme-select" class="theme-selector__label">Theme:</label>
+      <select id="theme-select" class="theme-selector__select" aria-label="Select game theme">
+        <option value="classic">Classic</option>
+        <option value="jungle">Jungle / Selva</option>
+        <option value="cyberpunk">Space Cyberpunk</option>
+      </select>
+    </div>
   </header>
 
   <main class="main-layout">
@@ -16,8 +24,8 @@
       <h2 id="board-title" class="section-title">Board</h2>
       <div id="game-board" class="game-board" role="grid" aria-label="Snakes and Ladders Board"></div>
       <div class="board-legend">
-        <span class="legend-item legend-item--ladder">Ladder</span>
-        <span class="legend-item legend-item--snake">Snake</span>
+        <span class="legend-item legend-item--ladder" id="ladder-label">Ladder</span>
+        <span class="legend-item legend-item--snake" id="snake-label">Snake</span>
       </div>
     </section>
 
